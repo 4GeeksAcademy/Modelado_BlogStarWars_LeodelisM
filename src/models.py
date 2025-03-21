@@ -15,7 +15,7 @@ class User(db.Model):
     is_active: Mapped[bool] = mapped_column(Boolean(), nullable=False)
 
 
-    def serialize(self):
+    def serialize_user(self):
         return {
             "id": self.id,
             "email": self.email,
@@ -31,7 +31,7 @@ class People(db.Model):
     __tablename__ = "people"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name_people: Mapped[str] = mapped_column(String(250), nullable=False)
+    people_name: Mapped[str] = mapped_column(String(250), nullable=False)
     height: Mapped[float] = mapped_column(nullable=False)
     weight: Mapped[float] = mapped_column(nullable=False)
     hair_color: Mapped[str] = mapped_column(String(100), nullable=False)
@@ -42,10 +42,10 @@ class People(db.Model):
     species:  Mapped[str] = mapped_column(String(100), nullable=False)
     home_planet:  Mapped[str] = mapped_column(String(100), nullable=False)
 
-    def serialize(self):
+    def serialize_people(self):
         return{
             "id": self.id,
-            "name_people": self.name_people,
+            "name_people": self.people_name,
             "height": self.height,
             "weight": self.weight,
             "hair_color": self.hair_color,
@@ -58,7 +58,7 @@ class People(db.Model):
         }
 
     # Relaciones
-    character_fav= relationship("favorite", back_populates= "character")
+    people_fav= relationship("favorite", back_populates= "people")
 
 class Planet(db.Model):
     __tablename__ = 'planet'
@@ -73,7 +73,7 @@ class Planet(db.Model):
     orbital_period: Mapped[float] = mapped_column(nullable=False)
     terrain: Mapped[str] = mapped_column(String(100), nullable=False)
 
-    def serialize(self):
+    def serialize_planet(self):
         return {
             "id": self.id,
             "planet_name": self.planet_name,
@@ -93,9 +93,9 @@ class Favorite(db.Model):
     __tablename__ = 'favorite'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(db.ForeignKey('user.id'))
-    people_id: Mapped[int] = mapped_column(db.ForeignKey('people.id'), nullable= True)
-    planet_id: Mapped[int] = mapped_column(db.ForeignKey('planet.id'), nullable= True)
+    user_id: Mapped[int] = mapped_column(db.ForeignKey('user.id'), nullable =True, unique=True)
+    people_id: Mapped[int] = mapped_column(db.ForeignKey('people.id'), nullable= True, unique=True)
+    planet_id: Mapped[int] = mapped_column(db.ForeignKey('planet.id'), nullable= True, unique=True)
 
     def serialize(self):
         return{
