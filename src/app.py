@@ -187,14 +187,14 @@ def delete_planet_favorite(planet_id):
 
 # [GET] /people *
 @app.route('/people', methods=['GET'])
-def get_all_peoples():
-    peoples = People.query.all()
+def get_all_person():
+    person = People.query.all()
 
-    if not peoples:
+    if not person:
         return jsonify({"mensaje": "Personajes no encontrados"}), 404
 
     response_body = {
-        "peoples": [people.serialize_favorite() for people in peoples]
+        "person": [people.serialize_favorite() for people in person]
     }
 
     return jsonify(response_body), 200
@@ -322,7 +322,7 @@ def add_people():
 
     return jsonify({"mensaje": "Personaje Creado"}), 201
 
-# Put Planets - Peoples
+# Put Planets - person
 @app.route('/planets/<int:planet_id>', methods=['PUT'])
 def update_planet(planet_id):
     request_data = request.json
@@ -350,7 +350,7 @@ def update_planet(planet_id):
     return jsonify({"mensaje": "Planeta actualizado"}), 200
 
 
-@app.route('/peoples/<int:people_id>', methods=['PUT'])
+@app.route('/person/<int:people_id>', methods=['PUT'])
 def update_people(people_id):
     request_data = request.json
 
@@ -390,7 +390,7 @@ def delete_planet(planet_id):
 
     return jsonify({"mensaje": "Planeta borrado"}), 200
 
-@app.route('/peoples/<int:people_id>', methods=['DELETE'])
+@app.route('/people/<int:people_id>', methods=['DELETE'])
 def delete_people(people_id):
 
     people = People.query.get(people_id)
